@@ -2,6 +2,7 @@ import java.awt.*; //provides classes for creating and managing GUI components
 import java.awt.event.*; // contains classes and interfaces for handling various events in 
 //AWT-based applications, such as user interactions. For example, classes like ActionEvent
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.random.*;
 import javax.swing.*;
 
@@ -28,8 +29,9 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     int velocityY = 0; // the game starts with the bird just falling downwards
     // an X velocity is not required because the pipes actually move towards the bird
     int gravity = 1; //every frame the bird will move down my one pixel
+    
     ArrayList<Pipe> pipes;
-
+    Random random = new Random();
 
 
     FlappyBird(){
@@ -71,7 +73,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
 
 
     public void placePipes(){
+        int randomPipeY = (int)(pipeY - pipeHeight/4 - Math.random()* pipeHeight/2);
+        
         Pipe topPipe = new Pipe(topPipeIMG);
+        topPipe.y = randomPipeY;
         pipes.add(topPipe);}
 
     //methods that paints/loads the images into the JLabel
