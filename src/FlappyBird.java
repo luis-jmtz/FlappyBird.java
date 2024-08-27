@@ -89,7 +89,7 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         //pipes
         for(int i = 0; i < pipes.size(); i++ ){
             Pipe pipe =  pipes.get(i);
-            g.drawImage(pipe.img, pipe.x,pipe.y,pipe.height,pipe.width, null);
+            g.drawImage(pipe.img, pipe.x,pipe.y,pipe.width,pipe.height, null);
         }
     }
 
@@ -143,22 +143,23 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
                 //constructor
                 Bird(Image img){this.img = img;}}
 
-    //Var. for Pipes
+    //pipe class
     int pipeX = boardWidth;
     int pipeY = 0;
-    int pipeWidth = 64;
+    int pipeWidth = 64;  //scaled by 1/6
     int pipeHeight = 512;
 
-    //Pipe Class
-    class Pipe{
+    class Pipe {
         int x = pipeX;
-        int y  =pipeY;
+        int y = pipeY;
         int width = pipeWidth;
-        int height =  pipeHeight;
+        int height = pipeHeight;
         Image img;
-        boolean passed = false; // will be used to keep track of score
-            //pipe constructor
-            Pipe(Image img){this.img = img;}    
+        boolean passed = false;
+
+        Pipe(Image img) {
+            this.img = img;
+        }
     }
         
 
