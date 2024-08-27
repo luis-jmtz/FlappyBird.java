@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.random.*;
 import javax.swing.*;
 
-public class FlappyBird extends JPanel{
+public class FlappyBird extends JPanel implements ActionListener{
     //basically makes the class a JPanel object ^
 
     int boardWidth = 360;
@@ -20,6 +20,8 @@ public class FlappyBird extends JPanel{
 
     //Game Logic variables
     Bird bird;
+    Timer gameLoop;
+
 
     FlappyBird(){
         setPreferredSize(new Dimension(boardWidth, boardHeight));
@@ -35,6 +37,13 @@ public class FlappyBird extends JPanel{
         //bird
         bird = new Bird(birdIMG);
 
+        //game timer
+        gameLoop = new Timer(1000/60, this); //timer determines how often the program should repeat an action
+        // the first parameters is in milliseconds. Since the game should be 60 fps, we have it update 60 times in a second
+        // 1000 milliseconds =  1 second
+
+        gameLoop.start();
+
     }
     
 
@@ -45,6 +54,8 @@ public class FlappyBird extends JPanel{
         draw(g);}
 
     public void draw(Graphics g){
+        //System.out.println("draw"); //basic debug to make sure gameloop is running
+        
         g.drawImage(backgroundImg, 0,0, boardWidth, boardHeight, null);
         g.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height, null);
         //^ this is the reason that bird is stored as a class as it is easier to refer to the elements
@@ -53,7 +64,11 @@ public class FlappyBird extends JPanel{
         //the x and y are the starting position and the next two variables refer to the size of the image
     }
 
-
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        //this will be action(s) performed 60 times per second
+        repaint(); //runs the paintComponent method again
+    }
 
 
 
@@ -73,4 +88,7 @@ public class FlappyBird extends JPanel{
             Image img;
                 //constructor
                 Bird(Image img){this.img = img;}}
+
+
+
 }
