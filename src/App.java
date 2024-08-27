@@ -9,15 +9,22 @@ public class App {
         int boardHeight = 640; //integers are in pixels
 
         JFrame frame = new JFrame("Flappy Bird - Code Practice"); 
-        frame.setVisible(true);
+        //frame.setVisible(true);
         frame.setSize(boardWidth,boardHeight);
         frame.setLocationRelativeTo(null); //places the window at the center of the screen
         frame.setResizable(false);//keeps user from resizing screen
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         System.out.println("Frame Created Successfully");
-        //time 4:24
+        
+        //adding the FlappyBird class
+        FlappyBird flappyBird = new FlappyBird();
+        frame.add(flappyBird);
+        frame.pack();
 
 
+
+        
+        frame.setVisible(true);
     }
 
 
