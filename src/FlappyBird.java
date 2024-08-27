@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.random.*;
 import javax.swing.*;
 
-public class FlappyBird extends JPanel implements ActionListener{
+public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     //basically makes the class a JPanel object ^
+    //the listeners actually allow the computer to detect inputs from the user and the program
 
     int boardWidth = 360;
     int boardHeight = 640;
@@ -21,13 +22,17 @@ public class FlappyBird extends JPanel implements ActionListener{
     //Game Logic variables
     Bird bird;
     Timer gameLoop;
-    int velocityY = -6; //this is how big the jumps are
+    int velocityY = 0; // the game starts with the bird just falling downwards
     // an X velocity is not required because the pipes actually move towards the bird
+    int gravity = 1; //every frame the bird will move down my one pixel
 
 
     FlappyBird(){
         setPreferredSize(new Dimension(boardWidth, boardHeight));
         //setBackground(Color.BLUE);
+
+        setFocusable(true); //makes sure the the flappybird panel is the one that is being checked for the key events
+        addKeyListener(this); //makes sure the keylisteners are checked
 
         //load images
         backgroundImg = new ImageIcon(getClass().getResource("./flappybirdbg.png")).getImage();
@@ -69,14 +74,27 @@ public class FlappyBird extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         //this will be action(s) performed 60 times per second
-
         move();// moves the images of their location has been updated
-
         repaint(); //runs the paintComponent method again
     }
 
+    //Methods for keyboard inputs
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_SPACE){velocityY = - 9;}
+        // when any key is pressed, if it is the space base bar the bird jumps
+    }
+    
+    @Override
+    public void keyReleased(KeyEvent e) {}
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
+    //moves the bird
     public void move(){
         //bird
+        velocityY += gravity;
         bird.y += velocityY;
         bird.y = Math.max(bird.y, 0);// limits the max jump height of the bird
     }
@@ -97,6 +115,11 @@ public class FlappyBird extends JPanel implements ActionListener{
             Image img;
                 //constructor
                 Bird(Image img){this.img = img;}}
+
+
+        
+
+
 
 
 
