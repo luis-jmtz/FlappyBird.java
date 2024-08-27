@@ -21,6 +21,8 @@ public class FlappyBird extends JPanel implements ActionListener{
     //Game Logic variables
     Bird bird;
     Timer gameLoop;
+    int velocityY = -6; //this is how big the jumps are
+    // an X velocity is not required because the pipes actually move towards the bird
 
 
     FlappyBird(){
@@ -67,10 +69,17 @@ public class FlappyBird extends JPanel implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         //this will be action(s) performed 60 times per second
+
+        move();// moves the images of their location has been updated
+
         repaint(); //runs the paintComponent method again
     }
 
-
+    public void move(){
+        //bird
+        bird.y += velocityY;
+        bird.y = Math.max(bird.y, 0);// limits the max jump height of the bird
+    }
 
     //Bird Variables
     int birdX = boardWidth/8; //places the bird on the left side of the screen
