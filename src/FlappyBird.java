@@ -22,9 +22,14 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     //Game Logic variables
     Bird bird;
     Timer gameLoop;
+    Timer placePipesTimer;
+
+    int velocityX = -4; //this is the rate that the pipes move every frame
     int velocityY = 0; // the game starts with the bird just falling downwards
     // an X velocity is not required because the pipes actually move towards the bird
     int gravity = 1; //every frame the bird will move down my one pixel
+    ArrayList<Pipe> pipes;
+
 
 
     FlappyBird(){
@@ -44,6 +49,16 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         //bird
         bird = new Bird(birdIMG);
 
+        pipes = new ArrayList<Pipe>();
+
+        //place pipes timer
+        placePipesTimer = new Timer(1500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e){placePipes();;}});
+
+        placePipesTimer.start();
+        
+        
         //game timer
         gameLoop = new Timer(1000/60, this); //timer determines how often the program should repeat an action
         // the first parameters is in milliseconds. Since the game should be 60 fps, we have it update 60 times in a second
@@ -54,6 +69,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     }
     
 
+
+    public void placePipes(){
+        Pipe topPipe = new Pipe(topPipeIMG);
+        pipes.add(topPipe);}
 
     //methods that paints/loads the images into the JLabel
     public void paintComponent(Graphics g){
@@ -66,9 +85,12 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         g.drawImage(backgroundImg, 0,0, boardWidth, boardHeight, null);
         g.drawImage(bird.img, bird.x, bird.y, bird.width, bird.height, null);
         //^ this is the reason that bird is stored as a class as it is easier to refer to the elements
-        // I'm not going to change it because I'm following a tutorial, but I would personally remove the bird variables and instead store them in the bird class
 
-        //the x and y are the starting position and the next two variables refer to the size of the image
+        //pipes
+        for(int i = 0; i < pipes.size(); i++ ){
+            Pipe pipe =  pipes.get(i);
+            g.drawImage(pipe.img, pipe.x,pipe.y,pipe.height,pipe.width, null);
+        }
     }
 
     @Override
@@ -97,6 +119,13 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         velocityY += gravity;
         bird.y += velocityY;
         bird.y = Math.max(bird.y, 0);// limits the max jump height of the bird
+        bird.y = Math.min(bird.y, 616);// limits the max jump height of the bird
+
+        //pipes
+        for(int i = 0; i < pipes.size(); i++ ){
+            Pipe pipe =  pipes.get(i);
+            pipe.x += velocityX; //every frame the pipe moves 4 pixels to the left
+        }
     }
 
     //Bird Variables
@@ -104,8 +133,6 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     int birdY = boardHeight/2; // at the start of the game, the bird starts in the midddle of the screen
     int birdWidth = 34; // in pixels
     int birdHeight = 24;
-
-    
         //Class to hold bird values
         class Bird{
             int x = birdX;
@@ -116,6 +143,24 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
                 //constructor
                 Bird(Image img){this.img = img;}}
 
+    //Var. for Pipes
+    int pipeX = boardWidth;
+    int pipeY = 0;
+    int pipeWidth = 64;
+    int pipeHeight = 512;
+
+    //Pipe Class
+    class Pipe{
+        int x = pipeX;
+        int y  =pipeY;
+        int width = pipeWidth;
+        int height =  pipeHeight;
+        Image img;
+        boolean passed = false; // will be used to keep track of score
+            //pipe constructor
+            Pipe(Image img){this.img = img;}    
+    }
+        
 
         
 
