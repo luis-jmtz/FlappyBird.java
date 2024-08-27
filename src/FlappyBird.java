@@ -17,25 +17,8 @@ public class FlappyBird extends JPanel{
     Image topPipeIMG;
     Image  bottomPipeIMG;
 
-    //Bird Variables
-    int birdX = boardWidth/8; //places the bird on the left side of the screen
-    int birdY = boardHeight/2; // at the start of the game, the bird starts in the midddle of the screen
-    int birdWidth = 34; // in pixels
-    int birdHeight = 24;
 
-    
-        //Class to hold bird values
-        class Bird{
-            int x = birdX;
-            int y = birdY;
-            int width = birdWidth;
-            int height = birdHeight;
-            Image img;
-                //constructor
-                Bird(Image img){this.img = img;}}
-
-
-    //Game Logic
+    //Game Logic variables
     Bird bird;
 
     FlappyBird(){
@@ -74,5 +57,20 @@ public class FlappyBird extends JPanel{
 
 
 
+    //Bird Variables
+    int birdX = boardWidth/8; //places the bird on the left side of the screen
+    int birdY = boardHeight/2; // at the start of the game, the bird starts in the midddle of the screen
+    int birdWidth = 34; // in pixels
+    int birdHeight = 24;
 
+    
+        //Class to hold bird values
+        class Bird{
+            int x = birdX;
+            int y = birdY;
+            int width = birdWidth;
+            int height = birdHeight;
+            Image img;
+                //constructor
+                Bird(Image img){this.img = img;}}
 }
