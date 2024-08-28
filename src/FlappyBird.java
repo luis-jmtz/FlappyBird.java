@@ -27,6 +27,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     
     boolean gameOver = false;
 
+    double score = 0;
+
     int velocityX = -4; //this is the rate that the pipes move every frame
     int velocityY = 0; // the game starts with the bird just falling downwards
     // an X velocity is not required because the pipes actually move towards the bird
@@ -105,6 +107,13 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
             Pipe pipe =  pipes.get(i);
             g.drawImage(pipe.img, pipe.x,pipe.y,pipe.width,pipe.height, null);
         }
+
+        //score
+        g.setColor(Color.white);
+        g.setFont(new Font("Ariel", Font.PLAIN, 32));
+        if (gameOver){
+            g.drawString("Game Over: " + String.valueOf((int) score),10,35);
+        }else g.drawString(String.valueOf((int) score), 10, 35);
     }
 
     @Override
@@ -121,6 +130,16 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_SPACE){velocityY = - 9;}
         // when any key is pressed, if it is the space base bar the bird jumps
+        if(gameOver){
+            //reset the game by resetting all of their values back to default
+            bird.y = birdY;
+            velocityY = 0;
+            pipes.clear();
+            score = 0;
+            gameOver = false;
+            gameLoop.start();
+            placePipesTimer.start();
+        }
     }
     
     @Override
@@ -140,7 +159,11 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         for(int i = 0; i < pipes.size(); i++ ){
             Pipe pipe =  pipes.get(i);
             pipe.x += velocityX; //every frame the pipe moves 4 pixels to the left
-            if(collision(bird, pipe)){gameOver = true;}    
+
+            if(!pipe.passed && bird.x > pipe.x + pipe.width){pipe.passed = true;
+            score += 0.5;} // use .5 because their are two pipes
+
+            if(collision(bird, pipe)){gameOver = true;}  
         }
 
         
