@@ -140,12 +140,24 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         for(int i = 0; i < pipes.size(); i++ ){
             Pipe pipe =  pipes.get(i);
             pipe.x += velocityX; //every frame the pipe moves 4 pixels to the left
+            if(collision(bird, pipe)){gameOver = true;}    
         }
 
+        
         if(bird.y > boardHeight|| bird.y <= 1 ){gameOver = true;}
 
 
     }
+
+
+    //function to detect if the bird hit a pipe
+    public boolean collision(Bird a, Pipe b){
+        return  a.x < b.x + b.width && // the bird's top left corner doesn't reach b's top right corner
+                a.x + a.width > b.x  && // a's top right corner passes b's top left corner
+                a.y < b.y + b.height && // a's top left corner doesn't read b's bottom left corner
+                a.y + a.height > b.y; // a's bottom left corner passes b's top left corner
+    }
+
 
     //Bird Variables
     int birdX = boardWidth/8; //places the bird on the left side of the screen
