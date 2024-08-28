@@ -24,6 +24,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     Bird bird;
     Timer gameLoop;
     Timer placePipesTimer;
+    
+    boolean gameOver = false;
 
     int velocityX = -4; //this is the rate that the pipes move every frame
     int velocityY = 0; // the game starts with the bird just falling downwards
@@ -110,6 +112,8 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         //this will be action(s) performed 60 times per second
         move();// moves the images of their location has been updated
         repaint(); //runs the paintComponent method again
+
+        if(gameOver){placePipesTimer.stop(); gameLoop.stop();}
     }
 
     //Methods for keyboard inputs
@@ -131,13 +135,16 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         velocityY += gravity;
         bird.y += velocityY;
         bird.y = Math.max(bird.y, 0);// limits the max jump height of the bird
-        bird.y = Math.min(bird.y, 616);// limits the max jump height of the bird
 
         //pipes
         for(int i = 0; i < pipes.size(); i++ ){
             Pipe pipe =  pipes.get(i);
             pipe.x += velocityX; //every frame the pipe moves 4 pixels to the left
         }
+
+        if(bird.y > boardHeight|| bird.y <= 1 ){gameOver = true;}
+
+
     }
 
     //Bird Variables
