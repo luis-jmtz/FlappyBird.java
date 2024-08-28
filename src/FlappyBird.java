@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.random.*;
 import javax.swing.*;
+import javax.sound.sampled.*; // Import for sound effects
+import java.io.File; // Import for loading sound files
+
+//sound effects by andersmmg @ freesound.org 
+// https://freesound.org/people/andersmmg/
 
 public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     //basically makes the class a JPanel object ^
@@ -12,6 +17,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
 
     int boardWidth = 360;
     int boardHeight = 640;
+
+    // Variables for the sound clips
+    Clip dingClip;
+    Clip flapClip;
 
     //variables for the images
     Image backgroundImg ;
@@ -51,6 +60,9 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
         birdIMG = new ImageIcon(getClass().getResource("./flappybird.png")).getImage();
         topPipeIMG = new ImageIcon(getClass().getResource("./toppipe.png")).getImage();
         bottomPipeIMG = new ImageIcon(getClass().getResource("./bottompipe.png")).getImage();
+
+        // Load sounds
+        loadSoundEffects();
 
         //bird
         bird = new Bird(birdIMG);
@@ -128,7 +140,10 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
     //Methods for keyboard inputs
     @Override
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_SPACE){velocityY = - 9;}
+        if (e.getKeyCode() == KeyEvent.VK_SPACE){
+            velocityY = - 9;
+            playSound(flapClip);
+        }
         // when any key is pressed, if it is the space base bar the bird jumps
         if(gameOver){
             //reset the game by resetting all of their values back to default
@@ -160,8 +175,11 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
             Pipe pipe =  pipes.get(i);
             pipe.x += velocityX; //every frame the pipe moves 4 pixels to the left
 
-            if(!pipe.passed && bird.x > pipe.x + pipe.width){pipe.passed = true;
-            score += 0.5;} // use .5 because their are two pipes
+            if(!pipe.passed && bird.x > pipe.x + pipe.width){
+            pipe.passed = true;
+            score += 0.5;  // use .5 because their are two pipes
+            playSound(dingClip);
+            }
 
             if(collision(bird, pipe)){gameOver = true;}  
         }
@@ -181,6 +199,28 @@ public class FlappyBird extends JPanel implements ActionListener, KeyListener{
                 a.y + a.height > b.y; // a's bottom left corner passes b's top left corner
     }
 
+
+    private void loadSoundEffects() {
+        try {
+            AudioInputStream dingSound = AudioSystem.getAudioInputStream(new File("./ding.wav").getAbsoluteFile());
+            dingClip = AudioSystem.getClip();
+            dingClip.open(dingSound);
+
+            AudioInputStream flapSound = AudioSystem.getAudioInputStream(new File("./bloop.wav").getAbsoluteFile());
+            flapClip = AudioSystem.getClip();
+            flapClip.open(flapSound);
+        } catch (Exception e) {
+            System.err.println("Error loading sound effects: " + e.getMessage());
+        }
+    }
+
+    private void playSound(Clip clip) {
+        if (clip.isRunning()) {
+            clip.stop();  // Stop the clip if it's still playing
+        }
+        clip.setFramePosition(0); // Rewind to the beginning
+        clip.start(); // Play the clip
+    }
 
     //Bird Variables
     int birdX = boardWidth/8; //places the bird on the left side of the screen
